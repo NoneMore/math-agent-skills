@@ -12,8 +12,11 @@ notation, theorem statements, proofs, or equation labels carry the meaning.
 
 - Prefer visual review for formulas. Render and inspect the relevant PDF pages
   before trusting extracted text, OCR, or copied LaTeX.
-- Use `pdfplumber`, `pypdf`, or similar extraction only for navigation,
-  search, and coarse text context. Do not treat extracted formula text as
+- Use PyMuPDF (`pymupdf` / `fitz`) as the preferred external PDF library for
+  rendering pages, reading metadata, locating pages, and coarse text
+  navigation.
+- Use `pdfplumber`, `pypdf`, or similar libraries only as fallbacks or when a
+  specific extraction feature is needed. Do not treat extracted formula text as
   authoritative.
 - Build a notation ledger before interpreting important formulas.
 - Tie every important claim to a page number, equation label, theorem label,

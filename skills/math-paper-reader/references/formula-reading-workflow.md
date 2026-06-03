@@ -9,7 +9,27 @@ Render the relevant PDF pages before transcribing formulas. Use extracted text
 only to find candidate pages, section headings, theorem labels, or equation
 labels.
 
-Preferred local pattern:
+Prefer PyMuPDF (`pymupdf` / `fitz`) for PDF operations:
+
+- render relevant pages to images for visual inspection;
+- read metadata, page counts, and page dimensions;
+- search or extract coarse text for navigation.
+
+Use `pdfplumber`, `pypdf`, Poppler, or other tools only as fallbacks or for a
+specific capability PyMuPDF does not cover well enough for the task.
+
+Preferred local rendering pattern:
+
+```python
+import fitz
+
+doc = fitz.open("input.pdf")
+page = doc[page_index]
+pix = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
+pix.save("tmp/paper-pages/page-001.png")
+```
+
+Poppler fallback:
 
 ```sh
 pdftoppm -png input.pdf tmp/paper-pages/page
