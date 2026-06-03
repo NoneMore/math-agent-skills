@@ -22,6 +22,10 @@ The generated blueprint uses theorem-like environments, stable labels,
 `\uses{...}` dependency annotations, and conservative Lean metadata such as
 `\lean{...}`, `\leanok`, and `\mathlibok`.
 
+Content-selection rules live in
+`references/blueprint-generation-principles.md`; `SKILL.md` keeps the required
+inputs, pre-output guard, workflow entry point, and LaTeX output contract.
+
 ## Trigger
 
 Use this skill when asking an agent to generate a Lean or leanblueprint
@@ -99,8 +103,9 @@ Install this repository as a Codex skill by placing it in a Codex skills
 directory, or by using whichever local skill installation workflow your Codex
 environment supports.
 
-The required skill file is:
+The required skill files are:
 
 ```text
 SKILL.md
+references/blueprint-generation-principles.md
 ```

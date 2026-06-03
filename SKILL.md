@@ -34,17 +34,13 @@ If any are missing, do not generate the blueprint. Tell the user to manually run
 
 ## Workflow
 
-1. Locate the target proposition in the selected materials. Quote or paraphrase only enough to identify it.
-2. Build a dependency route recursively:
-   - declaration dependencies needed to state each node;
-   - proof dependencies needed only in proofs;
-   - source facts or observations used without proof;
-   - directly cited external results.
-3. Minimize the route. Keep only nodes required to state or prove the target.
-4. Exclude unused background theory, broad framework exposition, alternative methods, examples, and tools not invoked by the proof.
-5. Topologically order the nodes so every dependency appears before its first use.
+Before choosing blueprint content, read and follow
+`references/blueprint-generation-principles.md`.
 
-If the materials do not determine a dependency, mark it as a proposed local lemma or observation rather than inventing an external theorem.
+1. Locate the target proposition in the selected materials. Quote or paraphrase only enough to identify it.
+2. Build a recursive dependency route according to the blueprint generation principles.
+3. Minimize and topologically order the route so every dependency appears before its first use.
+4. Generate the blueprint LaTeX using the output contract below.
 
 ## Output Contract
 
