@@ -1,23 +1,30 @@
 ---
 name: lean-blueprint-author
-description: Generate insertion-ready leanblueprint LaTeX for a specified Lean/formalization target from local reference materials. Use when the user asks for a Lean or leanblueprint blueprint, proof route, dependency route, or formalization roadmap from papers, notes, or other reference files.
+description: Generate leanblueprint routes, proof routes, dependency routes, or formalization roadmaps for Lean targets from local references. Use when the user asks to create a blueprint, modify an existing blueprint's structure or content, or sync blueprint labels with updated Lean code.
 ---
 
 # Lean Blueprint Author
 
-Use this skill to turn source materials into the minimal leanblueprint route needed to state and prove one user-specified target proposition.
+## Shared Prerequisites
 
-## Required Inputs
+Before any operation, determine which operation is requested (create, modify,
+or update) and satisfy its prerequisites:
 
-- Target proposition: always require the exact theorem/proposition/result before generating blueprint LaTeX. If missing, ask for it and stop.
-- Materials: use the user-specified material directory or file list. If none is specified, default to `PROJECT_ROOT/reference`.
-- Selection: if the material location contains multiple plausible source files and the user did not select them, list the candidates and ask which one or more to use. Stop until they choose.
+| Prerequisite           | Create | Modify | Update |
+|------------------------|--------|--------|--------|
+| Target proposition     | ✅ Required | Optional (may be unchanged) | ❌ |
+| Reference materials    | ✅ Required | Optional (if sourcing alternative routes) | ❌ |
+| Existing blueprint     | ❌ | ✅ Required (file or node range) | ✅ Required |
+| Project `.lean` code   | ❌ | ❌ | ✅ Required |
 
-Interpret `PROJECT_ROOT` as the Lean project root, preferably the directory containing `lakefile.lean` or `lakefile.toml`.
+### Project Scaffold Guard
 
-## Pre-Output Guard
+Run this guard only when the task will read from, write to, or validate an
+actual leanblueprint project tree. Do not run it for standalone insertion-ready
+LaTeX, pasted blueprint node ranges, or roadmap-style chat output.
 
-Before generating blueprint LaTeX, check that leanblueprint has already been initialized by verifying these files under `PROJECT_ROOT/blueprint/src`:
+When the guard applies, verify these files exist under
+`PROJECT_ROOT/blueprint/src`:
 
 - `content.tex`
 - `web.tex`
@@ -30,48 +37,32 @@ Before generating blueprint LaTeX, check that leanblueprint has already been ini
 - `macros/print.tex`
 - `macros/web.tex`
 
-If any are missing, do not generate the blueprint. Tell the user to manually run `leanblueprint new` from the Lean project root, then retry.
+If any are missing, stop. Tell the user to run `leanblueprint new` from the
+Lean project root, then retry.
 
-## Workflow
+Interpret `PROJECT_ROOT` as the Lean project root, preferably the directory
+containing `lakefile.lean` or `lakefile.toml`.
 
-Before choosing blueprint content, read and follow
-`references/blueprint-generation-principles.md`.
+## Shared Foundations
 
-1. Locate the target proposition in the selected materials. Quote or paraphrase only enough to identify it.
-2. Build a recursive dependency route according to the blueprint generation principles.
-3. Minimize and topologically order the route so every dependency appears before its first use.
-4. Generate the blueprint LaTeX using the output contract below.
+Before choosing blueprint content for any operation, read and follow
+`references/foundations.md`.
 
-## Output Contract
+## Shared Output Contract
 
-Produce only LaTeX suitable for direct insertion into `blueprint/src/content.tex`; omit `\begin{document}` and other wrapper boilerplate.
+Before producing blueprint LaTeX, status manifests, diffs, or roadmap output,
+read and follow `references/output-contract.md`.
 
-- Use leanblueprint theorem-like environments such as `definition`, `lemma`, `proposition`, `theorem`, and `corollary`.
-- Give every node a stable lowercase label, for example `def:local_name`, `lem:key_estimate`, `prop:intermediate_result`, `thm:target_result`, `obs:source_observation`.
-- Put statement dependencies in `\uses{...}` on the theorem-like environment.
-- Put proof-only dependencies in `\uses{...}` inside the `proof` environment.
-- Use `\lean{...}` only when the Lean declaration name is known from existing code, known from Mathlib, or is a clearly proposed local declaration name.
-- Never add `\leanok` unless that exact declaration is already formalized in the project.
-- Use `\mathlibok` only for known Mathlib results.
-- For source observations or cited external results that are not Lean declarations, state them as blueprint nodes with labels and citation/context, but do not pretend they are formalized.
-- Keep prose concise and mathematical; write in the user's language when practical.
+## Branch Dispatch
 
-Prefer this shape:
+Determine the operation from the user's request:
 
-```tex
-\begin{lemma}\label{lem:key_step}\uses{def:main_object}
-\lean{keyStep}
-Statement of the key step.
-\end{lemma}
-\begin{proof}\uses{obs:source_estimate, lem:auxiliary_bound}
-Proof route from the selected material.
-\end{proof}
+- **Create**: building a blueprint route from reference materials for a target
+  proposition. Read `references/create-workflow.md`.
+- **Modify**: changing an existing blueprint's structure, content, or proof
+  route. Read `references/modify-workflow.md`.
+- **Update**: syncing a blueprint with changes in formalization code. Read
+  `references/update-workflow.md`.
 
-\begin{theorem}\label{thm:target}\uses{def:main_object}
-\lean{targetTheorem}
-Statement of the requested target proposition.
-\end{theorem}
-\begin{proof}\uses{lem:key_step}
-Proof route of the target.
-\end{proof}
-```
+Follow only the workflow for the determined operation. If the operation is
+unclear, ask the user to choose among create, modify, or update.

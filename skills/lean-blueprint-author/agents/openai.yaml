@@ -1,4 +1,4 @@
 interface:
   display_name: "Lean Blueprint Author"
-  short_description: "Generate Lean blueprint routes"
-  default_prompt: "Use $lean-blueprint-author to generate a leanblueprint route for the specified theorem from these reference materials."
+  short_description: "Draft Lean blueprint routes"
+  default_prompt: "Use $lean-blueprint-author to draft a leanblueprint route, dependency route, or formalization roadmap for this Lean target from these references."

@@ -78,7 +78,11 @@ skills/
   lean-blueprint-author/
     SKILL.md
     agents/openai.yaml
-    references/blueprint-generation-principles.md
+    references/create-workflow.md
+    references/foundations.md
+    references/modify-workflow.md
+    references/output-contract.md
+    references/update-workflow.md
 ```
 
 There is intentionally no root-level `SKILL.md`; each skill is installed from
